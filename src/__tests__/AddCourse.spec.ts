@@ -14,6 +14,8 @@ describe('Add new coruse', () => {
     });
 
     expect(repo.courses).toHaveLength(1);
-    expect(output).toStrictEqual(output);
+    expect(output.name).toBe('javascript');
+    expect(output.open).toBe(true);
+    expect(output.code).toBeTruthy();
   });
 });
