@@ -1,3 +1,22 @@
+import { randomUUID } from 'crypto';
+
+export interface CourseProps {
+  name: string;
+  open: boolean;
+  code: string;
+}
+
 export default class Course {
-  constructor(public name: string, public open: boolean, public code: string) {}
+  public props: CourseProps;
+
+  constructor(props: Omit<CourseProps, 'code'>) {
+    this.props = {
+      ...props,
+      code: randomUUID(),
+    };
+  }
+
+  toJSON(): CourseProps {
+    return this.props;
+  }
 }

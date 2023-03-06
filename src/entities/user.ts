@@ -1,5 +1,9 @@
-export class User {
-  userRepository: [];
+interface IUser {
+  userName: string;
+  email: string;
+  password: string;
+}
 
-  constructor(public httpRequest: object) {}
+export class User {
+  constructor(public props: IUser) {}
 }

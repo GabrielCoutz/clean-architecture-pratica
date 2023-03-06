@@ -1,10 +1,24 @@
-import CourseRepository from '../repository/CourseRepository.js';
+import Course from '../entities/course.js';
+import CourseRepository from '../entities/CourseRepository.js';
+
+interface AddCourseInput {
+  name: string;
+  open: boolean;
+}
+
+interface AddCourseOutput {
+  name: string;
+  open: boolean;
+  code: string;
+}
 
 export default class AddCourse {
-  constructor(public courseRepository: CourseRepository) {}
+  constructor(private routerRepo: CourseRepository) {}
 
-  async execute() {
-    const course = await this.courseRepository.getCourseRepository('1');
-    return course;
+  async execute(input: AddCourseInput): Promise<AddCourseOutput> {
+    const course = new Course(input);
+    await this.routerRepo.insert(course);
+
+    return course.props;
   }
 }
