@@ -3,14 +3,15 @@ import { describe, expect, it } from 'vitest';
 import { UserRepositoryInMemory } from '../../infra/UserRepositoryInMemory.js';
 import { CreateUserUseCase } from '../../useCases/CreateUser.js';
 
+const info = {
+  firstName: 'firstName secondName',
+  lastName: 'lastName',
+  email: 'example@gmail.com',
+  password: 'password',
+};
+
 describe('Create user with use case', () => {
   it('Should create user and save it', async () => {
-    const info = {
-      firstName: 'firstName secondName',
-      lastName: 'lastName',
-      email: 'example@gmail.com',
-      password: 'password',
-    };
     const repo = new UserRepositoryInMemory();
     const createUserUseCase = new CreateUserUseCase(repo);
 
@@ -24,5 +25,15 @@ describe('Create user with use case', () => {
     expect(output.password).toBeDefined();
 
     expect(repo.users).toHaveLength(1);
+  });
+
+  it('Should throw if email already in use', async () => {
+    const repo = new UserRepositoryInMemory();
+    const createUserUseCase = new CreateUserUseCase(repo);
+
+    await createUserUseCase.execute(info);
+    const output = await createUserUseCase.execute(info);
+
+    expect(output).toThrowError('Email already in use');
   });
 });
