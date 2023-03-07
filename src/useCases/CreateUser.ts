@@ -1,5 +1,10 @@
-import { User, UserPropsInput, UserPropsOutput } from '../entities/User.js';
-import { UserRepositoryInMemory } from '../infra/UserRepositoryInMemory.js';
+import { UserRepositoryInMemory } from '../__tests__/repository/UserRepositoryInMemory.js';
+import {
+  User,
+  UserPropsInput,
+  UserPropsOutput,
+} from '../domain/entities/User.js';
+import { ConflictError } from '../domain/exceptions/Errors.js';
 
 export class CreateUserUseCase {
   constructor(private repo: UserRepositoryInMemory) {}
@@ -8,7 +13,7 @@ export class CreateUserUseCase {
     const user = new User(input);
 
     if (await this.emailAlreadyInUse(input.email))
-      throw new Error('Email already in use');
+      throw new ConflictError('Email already in use.');
 
     await this.repo.execute(user);
 

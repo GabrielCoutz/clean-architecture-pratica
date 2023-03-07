@@ -1,5 +1,5 @@
-import { User, UserPropsOutput } from '../entities/User.js';
-import { UserRepository } from './UserRepository.js';
+import { User, UserPropsOutput } from '../../domain/entities/User.js';
+import { UserRepository } from '../../gateways/UserRepository.js';
 
 export class UserRepositoryInMemory implements UserRepository {
   users: UserPropsOutput[] = [];

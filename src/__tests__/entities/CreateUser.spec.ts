@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { User } from '../../entities/User.js';
+import { User } from '../../domain/entities/User.js';
 
 describe('Create user constructor', () => {
   it('Should create and returns user props', () => {

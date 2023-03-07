@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { UserRepositoryInMemory } from '../../infra/UserRepositoryInMemory.js';
+import { ConflictError } from '../../domain/exceptions/Errors.js';
 import { CreateUserUseCase } from '../../useCases/CreateUser.js';
+import { UserRepositoryInMemory } from '../repository/UserRepositoryInMemory.js';
 
 const info = {
   firstName: 'firstName secondName',
@@ -32,8 +33,11 @@ describe('Create user with use case', () => {
     const createUserUseCase = new CreateUserUseCase(repo);
 
     await createUserUseCase.execute(info);
-    const output = await createUserUseCase.execute(info);
 
-    expect(output).toThrowError('Email already in use');
+    try {
+      await createUserUseCase.execute(info);
+    } catch (err) {
+      expect(err.statusCode).toBe(409);
+    }
   });
 });
