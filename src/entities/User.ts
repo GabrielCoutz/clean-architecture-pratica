@@ -1,10 +1,13 @@
-interface UserPropsInput {
+import { randomUUID } from 'crypto';
+
+export interface UserPropsInput {
   email: string;
   password: string;
   firstName: string;
   lastName: string;
 }
-interface UserPropsOutput extends UserPropsInput {
+export interface UserPropsOutput extends UserPropsInput {
+  id: string;
   userName: string;
 }
 
@@ -21,6 +24,7 @@ export class User {
     return {
       ...this.props,
       userName: this.userName,
+      id: randomUUID(),
     };
   }
 }

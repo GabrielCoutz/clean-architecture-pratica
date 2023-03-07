@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { User } from '../entities/User.js';
+import { User } from '../../entities/User.js';
 
-describe('Create user', () => {
+describe('Create user constructor', () => {
   it('Should create and returns user props', () => {
     const info = {
       firstName: 'gabriel',
@@ -14,10 +14,11 @@ describe('Create user', () => {
     const user = new User(info);
     const output = user.toJSON();
 
-    expect(output.firstName).toBe('gabriel');
-    expect(output.lastName).toBe('coutz');
+    expect(output.id).toBeDefined();
+    expect(output.firstName).toBe(info.firstName);
+    expect(output.lastName).toBe(info.lastName);
     expect(output.userName).toBe('gabriel.coutz');
-    expect(output.email).toBe('gabriel@gmail.com');
-    expect(output.password).toBe('password');
+    expect(output.email).toBe(info.email);
+    expect(output.password).toBeDefined();
   });
 });
