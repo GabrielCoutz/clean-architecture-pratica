@@ -4,24 +4,26 @@ import {
   UserPropsInput,
   UserPropsOutput,
 } from '../domain/entities/User.js';
-import { ConflictError } from '../domain/exceptions/Errors.js';
+import { ApiError, ConflictError } from '../domain/exceptions/Errors.js';
+import { Either, left, right } from './exceptions/Either.js';
 
 export class CreateUserUseCase {
   constructor(private repo: UserRepositoryInMemory) {}
 
-  async execute(input: UserPropsInput): Promise<UserPropsOutput> {
+  async execute(
+    input: UserPropsInput,
+  ): Promise<Either<ApiError, UserPropsOutput>> {
     const user = new User(input);
 
     if (await this.emailAlreadyInUse(input.email))
-      throw new ConflictError('Email already in use.');
+      return left(new ConflictError('Email already in use.'));
 
     await this.repo.execute(user);
 
-    return user.toJSON();
+    return right(user.toJSON());
   }
 
   private async emailAlreadyInUse(email: string): Promise<boolean> {
-    const result = await this.repo.findByEmail(email);
-    return !!result;
+    return !!(await this.repo.findByEmail(email));
   }
 }

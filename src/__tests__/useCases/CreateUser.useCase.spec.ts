@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { ConflictError } from '../../domain/exceptions/Errors.js';
 import { CreateUserUseCase } from '../../useCases/CreateUser.js';
+import { Left } from '../../useCases/exceptions/Either.js';
 import { UserRepositoryInMemory } from '../repository/UserRepositoryInMemory.js';
 
 const info = {
@@ -18,12 +18,17 @@ describe('Create user with use case', () => {
 
     const output = await createUserUseCase.execute(info);
 
-    expect(output.id).toBeDefined();
-    expect(output.firstName).toBe(info.firstName);
-    expect(output.lastName).toBe(info.lastName);
-    expect(output.userName).toBe('firstName.lastName');
-    expect(output.email).toBe(info.email);
-    expect(output.password).toBeDefined();
+    expect(output.isLeft()).toBeFalsy();
+    expect(output.isRight()).toBeTruthy();
+
+    if (output.isRight()) {
+      expect(output.value.id).toBeDefined();
+      expect(output.value.firstName).toBe(info.firstName);
+      expect(output.value.lastName).toBe(info.lastName);
+      expect(output.value.userName).toBe('firstName.lastName');
+      expect(output.value.email).toBe(info.email);
+      expect(output.value.password).toBeDefined();
+    }
 
     expect(repo.users).toHaveLength(1);
   });
@@ -33,11 +38,11 @@ describe('Create user with use case', () => {
     const createUserUseCase = new CreateUserUseCase(repo);
 
     await createUserUseCase.execute(info);
+    const output = await createUserUseCase.execute(info);
 
-    try {
-      await createUserUseCase.execute(info);
-    } catch (err) {
-      expect(err.statusCode).toBe(409);
-    }
+    expect(output.isLeft()).toBeTruthy();
+    expect(output.isRight()).toBeFalsy();
+
+    if (output.isLeft()) expect(output.value.statusCode).toEqual(409);
   });
 });
