@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
 import { CreateUserUseCase } from '../../useCases/CreateUser.js';
-import { Left } from '../../useCases/exceptions/Either.js';
 import { UserRepositoryInMemory } from '../repository/UserRepositoryInMemory.js';
 
 const info = {

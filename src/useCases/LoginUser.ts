@@ -1,5 +1,6 @@
 import { UserRepositoryInMemory } from '../__tests__/repository/UserRepositoryInMemory.js';
-import { UnauthorizedError } from '../domain/exceptions/Errors.js';
+import { ApiError, UnauthorizedError } from '../domain/exceptions/Errors.js';
+import { Either, left, right } from './exceptions/Either.js';
 
 interface LoginPropsInput {
   email: string;
@@ -14,16 +15,18 @@ interface LoginPropsOutput {
 export class LoginUserUseCase {
   constructor(private repo: UserRepositoryInMemory) {}
 
-  async execute(payload: LoginPropsInput): Promise<LoginPropsOutput> {
+  async execute(
+    payload: LoginPropsInput,
+  ): Promise<Either<ApiError, LoginPropsOutput>> {
     const user = await this.repo.findByEmail(payload.email);
-    if (!user) throw new UnauthorizedError('Invalid credentials.');
+    if (!user) return left(new UnauthorizedError('Invalid credentials.'));
 
     if (payload.password !== user.password)
-      throw new UnauthorizedError('Invalid credentials.');
+      return left(new UnauthorizedError('Invalid credentials.'));
 
-    return {
+    return right({
       token: '123',
       userId: user.id,
-    };
+    });
   }
 }

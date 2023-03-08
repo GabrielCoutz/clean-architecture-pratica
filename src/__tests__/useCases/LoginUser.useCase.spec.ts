@@ -7,7 +7,7 @@ import { UserRepositoryInMemory } from '../repository/UserRepositoryInMemory.js'
 describe('Login user', () => {
   const repo = new UserRepositoryInMemory();
 
-  beforeAll(() => {
+  beforeAll(async () => {
     const info = {
       firstName: 'firstName',
       lastName: 'secondName',
@@ -15,7 +15,7 @@ describe('Login user', () => {
       password: 'password',
     };
     const createUserUseCase = new CreateUserUseCase(repo);
-    createUserUseCase.execute(info);
+    await createUserUseCase.execute(info);
   });
 
   it('Should login user and returns token', async () => {
@@ -27,20 +27,28 @@ describe('Login user', () => {
     const loginUserUseCase = new LoginUserUseCase(repo);
     const output = await loginUserUseCase.execute(user);
 
-    expect(output.token).toBeDefined();
-    expect(output.userId).toBeDefined();
+    expect(output.isLeft()).toBeFalsy();
+    expect(output.isRight()).toBeTruthy();
+
+    if (output.isRight()) {
+      expect(output.value.token).toBeDefined();
+      expect(output.value.userId).toBeDefined();
+    }
   });
 
   it('Should return error with invalid credentials', async () => {
     const loginUserUseCase = new LoginUserUseCase(repo);
 
-    try {
-      await loginUserUseCase.execute({
-        email: 'anyEmail@example.com',
-        password: 'anyPassword',
-      });
-    } catch (error) {
-      expect(error.statusCode).toBe(401);
+    const output = await loginUserUseCase.execute({
+      email: 'anyEmail@example.com',
+      password: 'anyPassword',
+    });
+
+    expect(output.isLeft()).toBeTruthy();
+    expect(output.isRight()).toBeFalsy();
+
+    if (output.isLeft()) {
+      expect(output.value.statusCode).toEqual(401);
     }
   });
 });
