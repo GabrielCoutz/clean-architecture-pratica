@@ -1,4 +1,5 @@
 import { UserRepositoryInMemory } from '../__tests__/repository/UserRepositoryInMemory.js';
+import { Token } from '../domain/entities/Token.js';
 import { ApiError, UnauthorizedError } from '../domain/exceptions/Errors.js';
 import { Either, left, right } from './exceptions/Either.js';
 
@@ -19,13 +20,14 @@ export class LoginUserUseCase {
     payload: LoginPropsInput,
   ): Promise<Either<ApiError, LoginPropsOutput>> {
     const user = await this.repo.findByEmail(payload.email);
-    if (!user) return left(new UnauthorizedError('Invalid credentials.'));
 
-    if (payload.password !== user.password)
+    if (!user || payload.password !== user.password)
       return left(new UnauthorizedError('Invalid credentials.'));
 
+    const token = new Token();
+
     return right({
-      token: '123',
+      token: token.generate(user.id),
       userId: user.id,
     });
   }

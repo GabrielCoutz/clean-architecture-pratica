@@ -31,12 +31,12 @@ describe('Login user', () => {
     expect(output.isRight()).toBeTruthy();
 
     if (output.isRight()) {
-      expect(output.value.token).toBeDefined();
+      expect(output.value.token).toBeTypeOf('string');
       expect(output.value.userId).toBeDefined();
     }
   });
 
-  it('Should return error with invalid credentials', async () => {
+  it('Should return status 401 with invalid credentials', async () => {
     const loginUserUseCase = new LoginUserUseCase(repo);
 
     const output = await loginUserUseCase.execute({

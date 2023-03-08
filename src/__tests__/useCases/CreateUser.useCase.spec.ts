@@ -32,7 +32,7 @@ describe('Create user with use case', () => {
     expect(repo.users).toHaveLength(1);
   });
 
-  it('Should throw if email already in use', async () => {
+  it('Should return status 409 if email already in use', async () => {
     const repo = new UserRepositoryInMemory();
     const createUserUseCase = new CreateUserUseCase(repo);
 
