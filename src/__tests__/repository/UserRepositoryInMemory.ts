@@ -1,5 +1,6 @@
 import { User, UserPropsOutput } from '../../domain/entities/User.js';
 import { UserRepository } from '../../gateways/UserRepository.js';
+import { UpdateUserProps } from '../../useCases/UpdateUser.js';
 
 export class UserRepositoryInMemory implements UserRepository {
   users: UserPropsOutput[] = [];
@@ -8,9 +9,24 @@ export class UserRepositoryInMemory implements UserRepository {
     this.users.push(user.toJSON());
   }
 
-  findByEmail(userEmail: string): Promise<UserPropsOutput | undefined> {
+  async findByEmail(userEmail: string): Promise<UserPropsOutput | undefined> {
     const result = this.users.find((user) => user.email === userEmail);
 
-    return Promise.resolve(result);
+    return result;
+  }
+
+  async updateUser(
+    userId: string,
+    payload: Partial<UpdateUserProps>,
+  ): Promise<Partial<UpdateUserProps>> {
+    const userIndex = this.users.findIndex(
+      (userInMemory) => userInMemory.id === userId,
+    );
+    this.users[userIndex] = {
+      ...(payload as UserPropsOutput), // just for in memory usage
+      id: this.users[userIndex].id,
+    };
+
+    return payload;
   }
 }
