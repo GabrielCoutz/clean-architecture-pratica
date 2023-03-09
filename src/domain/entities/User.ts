@@ -14,7 +14,7 @@ export interface UserPropsOutput extends UserPropsInput {
 export class User {
   public userName: string;
 
-  constructor(private props: UserPropsInput) {
+  constructor(private readonly props: UserPropsInput) {
     this.userName = `${this.props.firstName.split(' ')[0]}.${
       this.props.lastName.split(' ')[0]
     }`;

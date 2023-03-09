@@ -1,5 +1,5 @@
 export class Left<L, R> {
-  constructor(public value: L) {}
+  constructor(public readonly value: L) {}
 
   isLeft(): this is Left<L, R> {
     return true;
@@ -15,7 +15,7 @@ export class Left<L, R> {
  */
 
 export class Right<L, R> {
-  constructor(public value: R) {}
+  constructor(public readonly value: R) {}
 
   isLeft(): this is Left<L, R> {
     return false;
