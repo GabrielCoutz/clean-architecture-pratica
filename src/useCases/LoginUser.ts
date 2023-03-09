@@ -1,6 +1,6 @@
 import { UserRepositoryInMemory } from '../__tests__/repository/UserRepositoryInMemory.js';
-import { Token } from '../domain/entities/Token.js';
 import { ApiError, UnauthorizedError } from '../domain/exceptions/Errors.js';
+import { Authentication } from '../gateways/Authentication.js';
 import { Either, left, right } from './exceptions/Either.js';
 
 interface LoginPropsInput {
@@ -14,7 +14,10 @@ interface LoginPropsOutput {
 }
 
 export class LoginUserUseCase {
-  constructor(private repo: UserRepositoryInMemory) {}
+  constructor(
+    private repo: UserRepositoryInMemory,
+    private token: Authentication,
+  ) {}
 
   async execute(
     payload: LoginPropsInput,
@@ -24,10 +27,8 @@ export class LoginUserUseCase {
     if (!user || payload.password !== user.password)
       return left(new UnauthorizedError('Invalid credentials.'));
 
-    const token = new Token();
-
     return right({
-      token: token.generate(user.id),
+      token: this.token.generate(user.id),
       userId: user.id,
     });
   }

@@ -14,7 +14,7 @@ describe('Delete user', () => {
       email: 'user@example.com',
       password: 'password',
     };
-  const createUserUseCase = new CreateUserUseCase(repo);
+    const createUserUseCase = new CreateUserUseCase(repo);
     await createUserUseCase.execute(info);
   });
 
