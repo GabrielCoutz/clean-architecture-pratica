@@ -9,8 +9,11 @@ export class UserRepositoryInMemory implements UserRepository {
     this.users.push(user.toJSON());
   }
 
-  async findByEmail(userEmail: string): Promise<UserPropsOutput | undefined> {
-    const result = this.users.find((user) => user.email === userEmail);
+  async findUserBy(
+    target: 'email' | 'id',
+    payload: string,
+  ): Promise<UserPropsOutput | undefined> {
+    const result = this.users.find((user) => user[target] === payload);
 
     return result;
   }
@@ -28,5 +31,13 @@ export class UserRepositoryInMemory implements UserRepository {
     };
 
     return payload;
+  }
+
+  async deleteUser(userId: string): Promise<boolean> {
+    const userIndex = this.users.findIndex(
+      (userInMemory) => userInMemory.id === userId,
+    );
+
+    return !!this.users.splice(userIndex, 1);
   }
 }

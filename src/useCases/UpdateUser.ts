@@ -21,7 +21,7 @@ export class UpdateUserUseCase {
     userId: string,
     payload: Partial<UpdateUserProps>,
   ): Promise<Either<ApiError, Partial<UpdateUserProps>>> {
-    const user = await this.repo.findByEmail(payload.email);
+    const user = await this.repo.findUserBy('email', payload.email);
     if (!user) return left(new NotFoundError('User not Found'));
 
     if (userId !== user.id)
