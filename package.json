@@ -7,7 +7,8 @@
   "scripts": {
     "test": "vitest",
     "server": "node --loader ts-node/esm ./src/infra/express/index.ts",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "lint": "npx eslint --fix"
   },
   "repository": {
     "type": "git",
