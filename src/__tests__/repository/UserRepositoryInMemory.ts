@@ -32,4 +32,12 @@ export class UserRepositoryInMemory implements UserRepository {
 
     return payload;
   }
+
+  async deleteUser(userId: string): Promise<boolean> {
+    const userIndex = this.users.findIndex(
+      (userInMemory) => userInMemory.id === userId,
+    );
+
+    return !!this.users.splice(userIndex, 1);
+  }
 }

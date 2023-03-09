@@ -11,4 +11,6 @@ export interface UserRepository {
     userId: string,
     payload: Partial<UpdateUserProps>,
   ): Promise<Partial<UpdateUserProps>>;
+
+  deleteUser(userId: string): Promise<boolean>;
 }
