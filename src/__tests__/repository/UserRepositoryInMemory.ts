@@ -9,8 +9,11 @@ export class UserRepositoryInMemory implements UserRepository {
     this.users.push(user.toJSON());
   }
 
-  async findByEmail(userEmail: string): Promise<UserPropsOutput | undefined> {
-    const result = this.users.find((user) => user.email === userEmail);
+  async findUserBy(
+    target: 'email' | 'id',
+    payload: string,
+  ): Promise<UserPropsOutput | undefined> {
+    const result = this.users.find((user) => user[target] === payload);
 
     return result;
   }

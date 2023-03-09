@@ -24,6 +24,6 @@ export class CreateUserUseCase {
   }
 
   private async emailAlreadyInUse(email: string): Promise<boolean> {
-    return !!(await this.repo.findByEmail(email));
+    return !!(await this.repo.findUserBy('email', email));
   }
 }

@@ -19,7 +19,7 @@ export class LoginUserUseCase {
   async execute(
     payload: LoginPropsInput,
   ): Promise<Either<ApiError, LoginPropsOutput>> {
-    const user = await this.repo.findByEmail(payload.email);
+    const user = await this.repo.findUserBy('email', payload.email);
 
     if (!user || payload.password !== user.password)
       return left(new UnauthorizedError('Invalid credentials.'));

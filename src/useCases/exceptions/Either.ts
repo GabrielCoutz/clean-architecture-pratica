@@ -10,6 +10,10 @@ export class Left<L, R> {
   }
 }
 
+/**
+ * this class return
+ */
+
 export class Right<L, R> {
   constructor(public value: R) {}
 
