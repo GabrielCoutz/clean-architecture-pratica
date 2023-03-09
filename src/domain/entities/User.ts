@@ -1,14 +1,14 @@
 import { randomUUID } from 'crypto';
 
 export interface UserPropsInput {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
+  readonly email: string;
+  readonly password: string;
+  readonly firstName: string;
+  readonly lastName: string;
 }
 export interface UserPropsOutput extends UserPropsInput {
-  id: string;
-  userName: string;
+  readonly id: string;
+  readonly userName: string;
 }
 
 export class User {

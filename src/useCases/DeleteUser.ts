@@ -3,7 +3,7 @@ import { UserRepository } from '../gateways/UserRepository.js';
 import { Either, left, right } from './exceptions/Either.js';
 
 export class DeleteUserUseCase {
-  constructor(private repo: UserRepository) {}
+  constructor(private readonly repo: UserRepository) {}
 
   async execute(userId: string): Promise<Either<ApiError, boolean>> {
     const user = await this.repo.findUserBy('id', userId);

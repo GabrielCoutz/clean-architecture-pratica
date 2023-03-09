@@ -7,15 +7,15 @@ import {
 import { Either, left, right } from './exceptions/Either.js';
 
 export interface UpdateUserProps {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  userName: string;
+  readonly email: string;
+  readonly password: string;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly userName: string;
 }
 
 export class UpdateUserUseCase {
-  constructor(private repo: UserRepositoryInMemory) {}
+  constructor(private readonly repo: UserRepositoryInMemory) {}
 
   async execute(
     userId: string,

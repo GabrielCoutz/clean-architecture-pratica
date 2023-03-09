@@ -8,7 +8,7 @@ import { ApiError, ConflictError } from '../domain/exceptions/Errors.js';
 import { Either, left, right } from './exceptions/Either.js';
 
 export class CreateUserUseCase {
-  constructor(private repo: UserRepositoryInMemory) {}
+  constructor(private readonly repo: UserRepositoryInMemory) {}
 
   async execute(
     input: UserPropsInput,

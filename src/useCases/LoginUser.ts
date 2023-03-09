@@ -4,19 +4,19 @@ import { Authentication } from '../gateways/Authentication.js';
 import { Either, left, right } from './exceptions/Either.js';
 
 interface LoginPropsInput {
-  email: string;
-  password: string;
+  readonly email: string;
+  readonly password: string;
 }
 
 interface LoginPropsOutput {
-  token: string;
-  userId: string;
+  readonly token: string;
+  readonly userId: string;
 }
 
 export class LoginUserUseCase {
   constructor(
-    private repo: UserRepositoryInMemory,
-    private token: Authentication,
+    private readonly repo: UserRepositoryInMemory,
+    private readonly token: Authentication,
   ) {}
 
   async execute(
